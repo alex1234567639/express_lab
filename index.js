@@ -8,6 +8,9 @@ const clothesRouter = require('./routes/product')
 const app = express();
 const PORT = 5000
 
+// 設定ejs樣板引擎
+app.set('view engine', 'ejs')
+
 // 引入express server讀取靜態資源
 app.use(express.static(__dirname + '/public'))
 // 引入router
@@ -32,6 +35,11 @@ app.get('/error-404', (req, res) => {
     res.json(message)
 })
 
+
+// render 
+app.get('/', (req, res) => {
+    res.render('index.ejs');
+})
 // 啟動
 app.listen(PORT, () => {
     console.log('Server is listen on port: ' + PORT)
