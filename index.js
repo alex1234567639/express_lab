@@ -2,6 +2,8 @@ const express = require('express');
 
 // 引入router
 const clothesRouter = require('./routes/product')
+const teacherRouter = require('./routes/teacher')
+const studentRouter = require('./routes/student')
 
 
 // 呼叫express
@@ -15,6 +17,8 @@ app.set('view engine', 'ejs')
 app.use(express.static(__dirname + '/public'))
 // 引入router
 app.use('/product', clothesRouter)
+app.use('/teacher', teacherRouter)
+app.use('/student', studentRouter)
 
 // 設定 get api
 app.get('/', (req, res) => {
