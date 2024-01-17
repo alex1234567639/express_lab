@@ -18,9 +18,20 @@ const serverLogMiddleWare = (req, res, next) => {
     if (req.method === 'GET' && req.url === '/') {
         console.log('log:[warning]: this url is not found')
     }
-    next();
+    next()
 }
+// Note: 身分驗證 一但身分錯誤就無法看到內容
+const validationMiddleWare = (req, res, next) => {
+    if (req.query.username !== 'Alex') {
+        res.status(401)
+        res.json({'message': 'Verify failed.'})
+    } else {
+        next()
+    }
+}
+
 app.use(serverLogMiddleWare)
+app.use(validationMiddleWare)
 
 // 設定ejs樣板引擎
 app.set('view engine', 'ejs')
