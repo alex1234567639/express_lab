@@ -10,6 +10,18 @@ const studentRouter = require('./routes/student')
 const app = express();
 const PORT = 5000
 
+const serverLogMiddleWare = (req, res, next) => {
+    // 紀錄server資訊
+    // req.method -> request的http方法
+    // req.url -> requset的路徑(router)
+    console.log(`log:[${req.method}]:${req.url} --- ${new Date().toISOString()}`)
+    if (req.method === 'GET' && req.url === '/') {
+        console.log('log:[warning]: this url is not found')
+    }
+    next();
+}
+app.use(serverLogMiddleWare)
+
 // 設定ejs樣板引擎
 app.set('view engine', 'ejs')
 
