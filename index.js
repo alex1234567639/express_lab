@@ -1,4 +1,5 @@
 const express = require('express');
+const session = require('express-session')
 
 // 引入router
 const clothesRouter = require('./routes/product')
@@ -7,8 +8,29 @@ const studentRouter = require('./routes/student')
 
 
 // 呼叫express
-const app = express();
+const app = express()
 const PORT = 5000
+
+// middleware express session
+app.use(
+    session({
+        secret: 'sessiontestsceret',
+        resave: true,
+        saveUninitialized: true,
+        cookie: {
+            maxAge: 10*60*1000 // 單位:毫秒
+        }
+    })
+)
+// 將資料塞入session
+app.get('/', (req, res) => {
+    req.session.account = 'Alex'
+    console.log(req.session.account)
+    res.send(`Hello ${req.session.account}`)
+})
+app.get('/cookie', (req, res) => {
+    res.send(`Hello ${req.session.account}`)
+})
 
 const serverLogMiddleWare = (req, res, next) => {
     // 紀錄server資訊
@@ -21,17 +43,17 @@ const serverLogMiddleWare = (req, res, next) => {
     next()
 }
 // Note: 身分驗證 一但身分錯誤就無法看到內容
-const validationMiddleWare = (req, res, next) => {
-    if (req.query.username !== 'Alex') {
-        res.status(401)
-        res.json({'message': 'Verify failed.'})
-    } else {
-        next()
-    }
-}
+// const validationMiddleWare = (req, res, next) => {
+//     if (req.query.username !== 'Alex') {
+//         res.status(401)
+//         res.json({'message': 'Verify failed.'})
+//     } else {
+//         next()
+//     }
+// }
 
 app.use(serverLogMiddleWare)
-app.use(validationMiddleWare)
+// app.use(validationMiddleWare)
 
 // 設定ejs樣板引擎
 app.set('view engine', 'ejs')
