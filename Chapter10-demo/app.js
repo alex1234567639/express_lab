@@ -25,10 +25,41 @@ mongoClient.connect('mongodb://127.0.0.1:27017/test').then((client)=>{
     const db = client.db('admin');
     const adminCollection = db.collection('admin')
 
-    // CRUD
+    // C -create
     app.post('/admin', (req, res)=>{
-        adminCollection.insertOne(req.body).then(result =>{
-            res.send('Create successfully!')
+        adminCollection.insertOne(req.body).then(() =>{
+            res.send('Create successfully!');
+        }).catch((err)=>{
+            console.log(err);
+        })
+    })
+
+    // R -read
+    app.get('/admin', (req, res)=>{
+        adminCollection.find().toArrary.then(result =>{
+            res.json(result);
+        }).catch((err)=>{
+            console.log(err);
+        })
+    })
+
+    // U -update
+    app.get('/admin', (req, res)=>{
+        const adminData = req.body;
+        adminCollection.findOneAndUpdate(
+            { name: adminData.name },
+            { $set: { age: adminData.age } }
+        ).then(() =>{
+            res.send('Update successfully!');
+        }).catch((err)=>{
+            console.log(err)
+        })
+    })
+
+    // D -delete
+    app.delete('/admin', (req, res)=>{
+        adminCollection.deleteOne( { name: req.body.data.name }).then(() =>{
+            res.send('Delete successfully!');
         }).catch((err)=>{
             console.log(err)
         })
