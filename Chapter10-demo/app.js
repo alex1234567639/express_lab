@@ -18,6 +18,10 @@ app.listen(PORT, () => {
     console.log('Server is listen on port: 3000');
 })
 
+app.get('/', (req, res)=>{
+    res.render('index.ejs');
+})
+
 mongoClient.connect('mongodb://127.0.0.1:27017/test').then((client)=>{
     console.log('DB Conneted!');
 
@@ -44,7 +48,7 @@ mongoClient.connect('mongodb://127.0.0.1:27017/test').then((client)=>{
     })
 
     // U -update
-    app.get('/admin', (req, res)=>{
+    app.patch('/admin', (req, res)=>{
         const adminData = req.body;
         adminCollection.findOneAndUpdate(
             { name: adminData.name },
@@ -52,7 +56,7 @@ mongoClient.connect('mongodb://127.0.0.1:27017/test').then((client)=>{
         ).then(() =>{
             res.send('Update successfully!');
         }).catch((err)=>{
-            console.log(err)
+            console.log(err);
         })
     })
 
